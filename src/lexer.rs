@@ -130,7 +130,7 @@ impl core::fmt::Debug for Token<'_> {
     }
 }
 
-pub static KEYWORDS: LazyLock<[(TokenKind, &'static str); 50]> = LazyLock::new(|| {
+static KEYWORDS: LazyLock<[(TokenKind, &'static str); 50]> = LazyLock::new(|| {
     let mut keywords = [
         (TokenKind::AsKeyword, "as"),
         (TokenKind::AsyncKeyword, "async"),
@@ -187,7 +187,7 @@ pub static KEYWORDS: LazyLock<[(TokenKind, &'static str); 50]> = LazyLock::new(|
     keywords
 });
 
-pub static SYMBOLS: LazyLock<[(TokenKind, &'static str); 45]> = LazyLock::new(|| {
+static SYMBOLS: LazyLock<[(TokenKind, &'static str); 45]> = LazyLock::new(|| {
     let mut symbols = [
         (TokenKind::SingleEqual, "="),
         (TokenKind::DoubleEqual, "=="),
