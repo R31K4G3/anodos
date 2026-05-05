@@ -184,8 +184,7 @@ impl<'input> Iterator for Lexer<'input> {
                                 continue 'outer;
                             }
                         }
-                        EitherOrBoth::Left(_) => break,
-                        EitherOrBoth::Right(_) => continue 'outer,
+                        EitherOrBoth::Left(_) | EitherOrBoth::Right(_) => continue 'outer,
                     }
                 }
                 let token = Token {
