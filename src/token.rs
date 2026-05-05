@@ -15,6 +15,7 @@ pub enum TokenKind {
     CatchKeyword,
     ClassKeyword,
     ConstKeyword,
+    ConstructKeyword,
     ContinueKeyword,
     DataKeyword,
     DefaultKeyword,

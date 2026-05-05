@@ -2,7 +2,7 @@ use crate::token::{Token, TokenKind};
 use itertools::{EitherOrBoth, Itertools as _};
 use std::sync::LazyLock;
 
-static KEYWORDS: LazyLock<[(TokenKind, &'static str); 50]> = LazyLock::new(|| {
+static KEYWORDS: LazyLock<[(TokenKind, &'static str); 51]> = LazyLock::new(|| {
     let mut keywords = [
         (TokenKind::AsKeyword, "as"),
         (TokenKind::AsyncKeyword, "async"),
@@ -12,6 +12,7 @@ static KEYWORDS: LazyLock<[(TokenKind, &'static str); 50]> = LazyLock::new(|| {
         (TokenKind::CatchKeyword, "catch"),
         (TokenKind::ClassKeyword, "class"),
         (TokenKind::ConstKeyword, "const"),
+        (TokenKind::ConstructKeyword, "construct"),
         (TokenKind::ContinueKeyword, "continue"),
         (TokenKind::DataKeyword, "data"),
         (TokenKind::DefaultKeyword, "default"),
