@@ -13,7 +13,10 @@ impl<'input> ExprIdent<'input> {
     #[inline(always)]
     pub fn from_token(token: Token<'input>) -> Self {
         assert!(matches!(token.kind, TokenKind::Identifier));
-        Self { text: token.text, span: token.span }
+        Self {
+            text: token.text,
+            span: token.span,
+        }
     }
 }
 

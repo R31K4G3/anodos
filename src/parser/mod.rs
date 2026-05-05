@@ -2,7 +2,9 @@ mod expr;
 mod macros;
 
 use crate::ast::expr::ExprIdent;
-use crate::ast::stmt::{Stmt, StmtBlock, StmtExpr, StmtFunc, StmtIf, StmtLet, StmtStruct, StmtWhile};
+use crate::ast::stmt::{
+    Stmt, StmtBlock, StmtExpr, StmtFunc, StmtIf, StmtLet, StmtStruct, StmtWhile,
+};
 use crate::ast::type_expr::TypeInfo;
 use crate::lexer::TokenWalker;
 use crate::token::{Token, TokenKind};
@@ -54,9 +56,11 @@ fn parse_statement<'input>(
             let param_type = ExprIdent::from_token(expect_token!(walker, TokenKind::Identifier));
             params.push((param_name, TypeInfo::Named(param_type)));
             while consume_token!(walker, TokenKind::Comma).is_some() {
-                let param_name = ExprIdent::from_token(expect_token!(walker, TokenKind::Identifier));
+                let param_name =
+                    ExprIdent::from_token(expect_token!(walker, TokenKind::Identifier));
                 expect_token!(walker, TokenKind::Colon);
-                let param_type = ExprIdent::from_token(expect_token!(walker, TokenKind::Identifier));
+                let param_type =
+                    ExprIdent::from_token(expect_token!(walker, TokenKind::Identifier));
                 params.push((param_name, TypeInfo::Named(param_type)));
             }
             expect_token!(walker, TokenKind::CloseParen);
@@ -72,7 +76,12 @@ fn parse_statement<'input>(
         while consume_token!(walker, TokenKind::CloseCurly).is_none() {
             body.push(parse_statement(walker, errors)?);
         }
-        return Ok(Stmt::StmtFunc(StmtFunc { name: funcname, params, return_type, body }));
+        return Ok(Stmt::StmtFunc(StmtFunc {
+            name: funcname,
+            params,
+            return_type,
+            body,
+        }));
     }
 
     if consume_token!(walker, TokenKind::StructKeyword).is_some() {
@@ -85,17 +94,19 @@ fn parse_statement<'input>(
             let field_type = ExprIdent::from_token(expect_token!(walker, TokenKind::Identifier));
             fields.push((field_name, TypeInfo::Named(field_type)));
             while consume_token!(walker, TokenKind::Comma).is_some() {
-                let field_name = ExprIdent::from_token(expect_token!(walker, TokenKind::Identifier));
+                let field_name =
+                    ExprIdent::from_token(expect_token!(walker, TokenKind::Identifier));
                 expect_token!(walker, TokenKind::Colon);
-                let field_type = ExprIdent::from_token(expect_token!(walker, TokenKind::Identifier));
+                let field_type =
+                    ExprIdent::from_token(expect_token!(walker, TokenKind::Identifier));
                 fields.push((field_name, TypeInfo::Named(field_type)));
             }
             expect_token!(walker, TokenKind::CloseParen);
         }
         return Ok(Stmt::StmtStruct(StmtStruct {
             name: typename,
-            fields
-        }))
+            fields,
+        }));
     }
 
     if consume_token!(walker, TokenKind::WhileKeyword).is_some() {
