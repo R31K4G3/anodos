@@ -112,13 +112,13 @@ static SYMBOLS: LazyLock<[(TokenKind, &'static str); 45]> = LazyLock::new(|| {
     symbols
 });
 
-pub struct Lexer<'input> {
+struct Lexer<'input> {
     source: &'input str,
     current_index: usize,
 }
 
 impl<'input> Lexer<'input> {
-    pub fn new(source: &'input str) -> Self {
+    fn new(source: &'input str) -> Self {
         Self {
             source,
             current_index: 0,
@@ -290,5 +290,63 @@ impl<'input> Iterator for Lexer<'input> {
         };
         self.current_index += first_char.len_utf8();
         return Some(token);
+    }
+}
+
+#[repr(transparent)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+struct JumpPoint(usize);
+
+pub struct TokenWalker<'input> {
+    lexer: Lexer<'input>,
+    peeked_token: Option<Option<Token<'input>>>,
+}
+
+impl<'input> TokenWalker<'input> {
+    pub fn new(source: &'input str) -> Self {
+        Self {
+            lexer: Lexer::new(source),
+            peeked_token: None,
+        }
+    }
+    pub fn peek(&mut self) -> Option<&Token<'input>> {
+        let lexer = &mut self.lexer;
+        self.peeked_token
+            .get_or_insert_with(|| lexer.next())
+            .as_ref()
+    }
+    pub fn peek_mut(&mut self) -> Option<&mut Token<'input>> {
+        let lexer = &mut self.lexer;
+        self.peeked_token
+            .get_or_insert_with(|| lexer.next())
+            .as_mut()
+    }
+    pub fn next_if(&mut self, f: impl FnOnce(&Token<'input>) -> bool) -> Option<Token<'input>> {
+        match self.next() {
+            Some(matched) if f(&matched) => Some(matched),
+            other => {
+                assert!(self.peeked_token.is_none());
+                self.peeked_token = Some(other);
+                None
+            }
+        }
+    }
+    pub fn create_jump_point(&self) -> JumpPoint {
+        JumpPoint(self.lexer.current_index)
+    }
+    pub fn jump_to(&mut self, point: JumpPoint) {
+        self.lexer.current_index = point.0;
+    }
+    pub fn range_from(&self, point: JumpPoint) -> (usize, usize) {
+        (point.0, self.lexer.current_index)
+    }
+}
+
+impl<'input> Iterator for TokenWalker<'input> {
+    type Item = Token<'input>;
+    fn next(&mut self) -> Option<Token<'input>> {
+        self.peeked_token
+            .take()
+            .unwrap_or_else(|| self.lexer.next())
     }
 }
