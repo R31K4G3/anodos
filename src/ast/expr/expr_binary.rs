@@ -1,6 +1,6 @@
 use super::Expr;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub enum BinaryOp {
     Add,
     Sub,

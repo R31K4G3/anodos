@@ -1,6 +1,6 @@
 use super::Expr;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub enum UnaryOp {
     Negate,
     Not,

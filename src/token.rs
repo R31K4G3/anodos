@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum TokenKind {
     // Literals
     Identifier,
@@ -110,7 +110,7 @@ pub enum TokenKind {
     UnterminatedLiteral,
 }
 
-#[derive(Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Hash, PartialEq, Eq)]
 pub struct Token<'input> {
     pub kind: TokenKind,
     pub text: &'input str,

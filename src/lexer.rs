@@ -293,7 +293,7 @@ impl<'input> Iterator for Lexer<'input> {
 }
 
 #[repr(transparent)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub struct JumpPoint(usize);
 
 pub struct TokenWalker<'input> {
